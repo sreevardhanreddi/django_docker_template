@@ -1,0 +1,28 @@
+version: "3.7"
+
+services:
+  web:
+    build:
+      context: ./web-project
+      dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./web-project:/usr/src/app/
+    ports:
+      - 8000:8000
+    env_file:
+      - .env.dev
+    depends_on:
+      - db
+
+  db:
+    build:
+      context: ./postgres-db
+      dockerfile: Dockerfile
+    volumes:
+      - ./postgres-db:/var/lib/postgresql
+    env_file:
+      - .env.dev
+
+volumes:
+  postgres_data:

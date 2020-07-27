@@ -1,0 +1,23 @@
+{% extends 'common/base.html' %}
+
+
+
+{% block content %}
+<h2>Books app</h2>
+
+<a href="{% url 'app_1:add_book' %}" class="btn btn-primary">Add Book</a>
+
+<div class="row">
+  {% for book in books %}
+  <div class="col-xs-12 col-sm-6 col-md-3 col-xl-4">
+    <h2>{{book.name}}</h2>
+    <img src="{{book.cover_image.url}}" alt="" class="img-fluid">
+    <p>{{book.description}}</p>
+    <p>{{book.pages}}</p>
+    <p>{{book.pages}}</p>
+    <p>{{book.created_at}}</p>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock content %}
