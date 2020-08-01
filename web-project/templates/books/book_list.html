@@ -1,11 +1,16 @@
 {% extends 'common/base.html' %}
 
-
-
 {% block content %}
 <h2>Books app</h2>
 
-<a href="{% url 'app_1:add_book' %}" class="btn btn-primary">Add Book</a>
+<div style="display: flex; justify-content: space-around;">
+  <div>
+    <a href="{% url 'app:add_book' %}" class="btn btn-primary">Add Book</a>
+  </div>
+  <div>
+    <button class="btn btn-info task_btn">Add celery Task</button>
+  </div>
+</div>
 
 <div class="row">
   {% for book in books %}
@@ -20,4 +25,25 @@
   {% endfor %}
 </div>
 
+
 {% endblock content %}
+
+{% block extra_scripts %}
+<script>
+
+  $('.task_btn').on('click', function () {
+    $.ajax({
+      url: '{% url "app:trigger_celery_task" %}',
+      method: 'GET',
+    })
+      .done((res) => {
+        alert(JSON.stringify(res) + " new task added to que!!, check celery logs")
+      })
+      .fail((err) => {
+        console.log(err);
+      });
+  });
+
+
+</script>
+{% endblock extra_scripts %}

@@ -16,7 +16,6 @@ RUN apk update \
 
 
 # install dependencies
-RUN pip install --upgrade pip
 COPY ./requirements.txt .
 RUN pip install -r requirements.txt
 
@@ -29,3 +28,5 @@ COPY . .
 RUN python manage.py collectstatic --noinput
 
 ENTRYPOINT ["/app/entrypoint.sh"]
+
+CMD gunicorn django_project.wsgi:application --workers 2 --bind 0.0.0.0:8000

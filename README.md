@@ -19,7 +19,7 @@ services:
     build: ./nginx-proxy
     volumes:
       - static_volume:/app/staticfiles
-      - ./media_volume:/app/media
+      - media_volume:/app/media
     ports:
       - 81:80
     depends_on:
@@ -29,10 +29,9 @@ services:
     build:
       context: ./web-project
       dockerfile: Dockerfile.prod
-    command: gunicorn docker_proj.wsgi:application --workers 2 --bind 0.0.0.0:8000
     volumes:
       - static_volume:/app/staticfiles
-      - ./media_volume:/app/media # ./ will mount the dir on the host, if you don't want to store them on host remove ./
+      - media_volume:/app/media
     expose:
       - 8000
     env_file:
@@ -43,9 +42,34 @@ services:
     build:
       context: ./postgres-db
     volumes:
-      - ./postgres-db:/var/lib/postgresql
+      - postgres_data:/var/lib/postgresql/data
     env_file:
       - .env.prod
+
+  worker:
+    build:
+      context: ./web-project
+      dockerfile: Dockerfile.worker
+    command: celery worker --app=django_project --loglevel=info --logfile=celery.log
+    env_file:
+      - .env.prod
+    depends_on:
+      - web
+      - redis
+
+  worker-celery-beat:
+    build:
+      context: ./web-project
+      dockerfile: Dockerfile.worker
+    command: celery worker --app=django_project -B --loglevel=info --logfile=celery.log
+    env_file:
+      - .env.prod
+    depends_on:
+      - web
+      - redis
+
+  redis:
+    build: ./redis
 
 volumes:
   postgres_data:
@@ -68,9 +92,10 @@ docker-compose -f docker-compose-prod.yml up --build -d
 
 ## Architecture
 
-![architecture](./app.png)
+<img alt="architecture" src="./app.svg">
 
 ## TODO
 
-- [] add support for celery workers
-- [] figure out how to add SSL for nginx
+- [ x ] add support for celery workers
+- [ ] add tests
+- [ ] figure out how to add SSL for nginx
