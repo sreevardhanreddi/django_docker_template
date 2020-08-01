@@ -28,7 +28,7 @@ def trigger_celery_task(request):
     args_list = [1, 2, 3]
     kwargs_list = {"a": 1, "b": 2, "c": 3}
     task_data = heavy_task.delay(*args_list, **kwargs_list)
-    return JsonResponse({"task_id": task_data.id}, status=202)
+    return JsonResponse({"task_id": task_data.id}, status=200)
 
 
 def get_task_status(request, task_id):

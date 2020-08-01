@@ -8,6 +8,7 @@ billiard==3.6.3.0
 black==19.10b0
 celery==4.4.7
 click==7.1.2
+coverage==5.2.1
 decorator==4.4.2
 dj-database-url==0.5.0
 Django==3.0.8
@@ -32,6 +33,9 @@ psycopg2==2.8.4
 ptyprocess==0.6.0
 Pygments==2.6.1
 pylint==2.5.3
+pytest==6.0.1
+pytest-cov==2.10.0
+pytest-django==3.9.0
 pytz==2020.1
 redis==3.5.3
 regex==2020.7.14
