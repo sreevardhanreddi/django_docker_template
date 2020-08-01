@@ -96,6 +96,4 @@ docker-compose -f docker-compose-prod.yml up --build -d
 
 ## TODO
 
-- [ x ] add support for celery workers
-- [ ] add tests
 - [ ] figure out how to add SSL for nginx
